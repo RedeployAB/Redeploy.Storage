@@ -42,8 +42,8 @@ namespace Redeploy.Azure.Storage
         /// <returns></returns>
         public CloudBlobContainer GetContainer(string containerName)
         {
-            CloudBlobClient blobClient = StorageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference(containerName);
+            CloudBlobClient storageClient = StorageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = storageClient.GetContainerReference(containerName);
 
             var exists = _containerExists(containerName).Result;
 
@@ -51,6 +51,38 @@ namespace Redeploy.Azure.Storage
                 container = null;
 
             return container;
+        }
+        
+        /// <summary>
+        /// Creates an Azure Storage Blob Container.
+        /// </summary>
+        /// <param name="containerName"></param>
+        /// <returns></returns>
+        public async Task<CloudBlobContainer> CreateContainer(string containerName)
+        {
+            CloudBlobClient storageClient = StorageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = storageClient.GetContainerReference(containerName);
+
+            bool result;
+
+            try 
+            {
+                result = await container.CreateIfNotExistsAsync();
+            }
+            catch (StorageException exception)
+            {
+                throw new System.AggregateException(exception);
+            }
+            
+
+            if (result == true) 
+            {
+                return storageClient.GetContainerReference(containerName);
+            } 
+            else 
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -63,8 +95,8 @@ namespace Redeploy.Azure.Storage
         public async Task<CloudBlob> UploadBlob(string containerName, string filePath, string blob)
         {
 
-            CloudBlobClient blobClient = StorageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference(containerName);
+            CloudBlobClient storageClient = StorageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = storageClient.GetContainerReference(containerName);
 
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(blob);
 
@@ -85,8 +117,8 @@ namespace Redeploy.Azure.Storage
         /// <returns></returns>
         private async Task<bool> _containerExists(string containerName)
         {
-            CloudBlobClient blobClient = StorageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference(containerName);
+            CloudBlobClient storageClient = StorageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = storageClient.GetContainerReference(containerName);
 
             var result = await container.ExistsAsync();
 
