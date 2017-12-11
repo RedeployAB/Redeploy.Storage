@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage.RetryPolicies;
 
 namespace Redeploy.Azure.Storage
 {
@@ -39,13 +40,23 @@ namespace Redeploy.Azure.Storage
         /// Gets a container from an Azure Storage Account. Returns null if it does not exist.
         /// </summary>
         /// <param name="containerName"></param>
-        /// <returns></returns>
+        /// <returns>CloudBlobContainer</returns>
         public CloudBlobContainer GetContainer(string containerName)
         {
-            CloudBlobClient storageClient = StorageAccount.CreateCloudBlobClient();
+            CloudBlobClient storageClient = _createBlobClient();
             CloudBlobContainer container = storageClient.GetContainerReference(containerName);
 
-            var exists = _containerExists(containerName).Result;
+            bool exists;
+
+            try 
+            {
+                exists = _containerExists(containerName).Result;
+            }
+            catch (System.AggregateException exception)
+            {
+                throw new System.AggregateException(exception);
+            }
+            
 
             if (!exists)
                 container = null;
@@ -57,10 +68,10 @@ namespace Redeploy.Azure.Storage
         /// Creates an Azure Storage Blob Container.
         /// </summary>
         /// <param name="containerName"></param>
-        /// <returns></returns>
+        /// <returns>CloudBlobContainer</returns>
         public async Task<CloudBlobContainer> CreateContainer(string containerName)
         {
-            CloudBlobClient storageClient = StorageAccount.CreateCloudBlobClient();
+            CloudBlobClient storageClient = _createBlobClient();
             CloudBlobContainer container = storageClient.GetContainerReference(containerName);
 
             bool result;
@@ -69,7 +80,7 @@ namespace Redeploy.Azure.Storage
             {
                 result = await container.CreateIfNotExistsAsync();
             }
-            catch (StorageException exception)
+            catch (System.AggregateException exception)
             {
                 throw new System.AggregateException(exception);
             }
@@ -91,38 +102,35 @@ namespace Redeploy.Azure.Storage
         /// <param name="containerName"></param>
         /// <param name="filePath"></param>
         /// <param name="blob"></param>
-        /// <returns></returns>
+        /// <returns>Task<CloudBlob></returns>
         public async Task<CloudBlob> UploadBlob(string containerName, string filePath, string blob)
         {
-
-            CloudBlobClient storageClient = StorageAccount.CreateCloudBlobClient();
+            CloudBlobClient storageClient = _createBlobClient();
             CloudBlobContainer container = storageClient.GetContainerReference(containerName);
 
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(blob);
 
-            using (var fileStream = System.IO.File.OpenRead(filePath))
+            CloudBlockBlob resultBlob;
+
+            try 
             {
-                await blockBlob.UploadFromStreamAsync(fileStream);
+                using (var fileStream = System.IO.File.OpenRead(filePath))
+                {
+                    await blockBlob.UploadFromStreamAsync(fileStream);
+                }
+            }
+            catch (System.IO.IOException exception)
+            {
+                throw new System.IO.IOException(exception.Message);
+            }
+            catch (System.AggregateException exception)
+            {
+                throw new System.AggregateException(exception);
             }
 
-            CloudBlockBlob resultBlob = container.GetBlockBlobReference(blob);
+            resultBlob = container.GetBlockBlobReference(blob);
 
             return resultBlob;
-        }
-
-        /// <summary>
-        /// Checks if a container exists.
-        /// </summary>
-        /// <param name="containerName"></param>
-        /// <returns></returns>
-        private async Task<bool> _containerExists(string containerName)
-        {
-            CloudBlobClient storageClient = StorageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = storageClient.GetContainerReference(containerName);
-
-            var result = await container.ExistsAsync();
-
-            return result;
         }
 
         /// <summary>
@@ -130,10 +138,48 @@ namespace Redeploy.Azure.Storage
         /// </summary>
         /// <param name="storageAccountName"></param>
         /// <param name="storageAccountKey"></param>
-        /// <returns></returns>
-        public static StorageCredentials NewStorageCredential(string storageAccountName, string storageAccountKey)
+        /// <returns>StorageCredentials</returns>
+        public static StorageCredentials StorageCredential(string storageAccountName, string storageAccountKey)
         {
             return new StorageCredentials(storageAccountName, storageAccountKey);
+        }
+
+        /// <summary>
+        /// Checks if a container exists.
+        /// </summary>
+        /// <param name="containerName"></param>
+        /// <returns>Task<bool></returns>
+        private async Task<bool> _containerExists(string containerName)
+        {
+            CloudBlobClient storageClient = _createBlobClient();
+            CloudBlobContainer container = storageClient.GetContainerReference(containerName);
+
+            bool result;
+
+            try
+            {
+                result = await container.ExistsAsync();
+            }
+            catch (System.AggregateException exception)
+            {
+                throw new System.AggregateException(exception);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Private method to create Blob Client. This method is prepared to make
+        /// optional settings easier.
+        /// </summary>
+        /// <returns>CloudBlobClient</returns>
+        private CloudBlobClient _createBlobClient()
+        {
+            CloudBlobClient storageClient = StorageAccount.CreateCloudBlobClient();
+            // Set options here.
+            storageClient.DefaultRequestOptions = new BlobRequestOptions { ServerTimeout = new System.TimeSpan(0, 0, 2) };
+
+            return storageClient;
         }
     }
 }
