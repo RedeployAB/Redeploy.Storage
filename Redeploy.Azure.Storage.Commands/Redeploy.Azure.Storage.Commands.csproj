@@ -6,4 +6,7 @@
     <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.6.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Redeploy.Azure.Storage\Redeploy.Azure.Storage.csproj" />
+  </ItemGroup>
 </Project>
