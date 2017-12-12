@@ -177,7 +177,7 @@ namespace Redeploy.Azure.Storage
         {
             CloudBlobClient storageClient = StorageAccount.CreateCloudBlobClient();
             // Set options here.
-            storageClient.DefaultRequestOptions = new BlobRequestOptions { ServerTimeout = new System.TimeSpan(0, 0, 2) };
+            storageClient.DefaultRequestOptions = new BlobRequestOptions { ServerTimeout = new System.TimeSpan(0, 0, 10) };
 
             return storageClient;
         }
