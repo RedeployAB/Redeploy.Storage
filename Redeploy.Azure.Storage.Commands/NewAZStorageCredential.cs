@@ -39,7 +39,7 @@ namespace Redeploy.Azure.Storage.Commands
 
         protected override void ProcessRecord()
         {
-            WriteObject(BlobStorageHelper.StorageCredential(_storageAccountName, _storageAccountKey));
+            WriteObject(AuthHelper.StorageCredential(_storageAccountName, _storageAccountKey));
         }
     }
 }

@@ -139,10 +139,12 @@ namespace Redeploy.Azure.Storage
         /// <param name="storageAccountName"></param>
         /// <param name="storageAccountKey"></param>
         /// <returns>StorageCredentials</returns>
+        /*
         public static StorageCredentials StorageCredential(string storageAccountName, string storageAccountKey)
         {
             return new StorageCredentials(storageAccountName, storageAccountKey);
         }
+        */
 
         /// <summary>
         /// Checks if a container exists.
@@ -180,6 +182,14 @@ namespace Redeploy.Azure.Storage
             storageClient.DefaultRequestOptions = new BlobRequestOptions { ServerTimeout = new System.TimeSpan(0, 0, 10) };
 
             return storageClient;
+        }
+
+        /*
+            TEMP
+         */
+        public CloudStorageAccount GetStorageAccount()
+        {
+            return StorageAccount;
         }
     }
 }
