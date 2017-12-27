@@ -7,6 +7,9 @@
   <ItemGroup>
     <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.6.0" />
+    <PackageReference Include="System.Net.Http" Version="4.1.0">
+      <IncludeAssets>Analyzers;Build;Compile;ContentFiles;Native</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Redeploy.Azure.Storage\Redeploy.Azure.Storage.csproj" />
