@@ -8,7 +8,7 @@ using Redeploy.Azure.Storage.Blob;
 namespace Redeploy.Azure.Storage.Commands
 {
     [OutputType(typeof(CloudBlob))]
-    [Cmdlet("Set", "AZStorageBlobContent")]
+    [Cmdlet("Set", "AZStorageBlobContent", SupportsShouldProcess = true)]
     public class SetAZStorageBlobContent : Cmdlet
     {
         [ValidateNotNull]
@@ -22,7 +22,6 @@ namespace Redeploy.Azure.Storage.Commands
             get { return _storageContext; }
             set { _storageContext = value; }
         }
-
         private StorageContext _storageContext;
 
         [ValidateNotNull]
@@ -35,8 +34,7 @@ namespace Redeploy.Azure.Storage.Commands
         {
             get { return _file; }
             set { _file = value; }
-        }
-        
+        }       
         private string _file;
 
         [ValidateNotNull]
@@ -50,7 +48,6 @@ namespace Redeploy.Azure.Storage.Commands
             get { return _blob; }
             set { _blob = value; }
         }
-
         private string _blob;
 
         [ValidateNotNull]
@@ -64,8 +61,15 @@ namespace Redeploy.Azure.Storage.Commands
             get { return _container; }
             set { _container = value; }
         }
-
         private string _container;
+
+        [Parameter()]
+        public SwitchParameter Force
+        {
+            get { return _force; }
+            set { _force = value; }
+        }
+        private bool _force;
 
         protected override void ProcessRecord()
         {
@@ -76,17 +80,51 @@ namespace Redeploy.Azure.Storage.Commands
             BlobHelper storageHelper = new BlobHelper(context);
             
             CloudBlob blob;
+            bool exists;
 
-            try
+            try 
             {
-                blob = storageHelper.UploadBlob(Container, resolvedFilePath, Blob).Result;
+                exists = storageHelper.BlobExists(Container, Blob).Result;
             }
             catch (System.AggregateException exception)
             {
-                throw new System.AggregateException(exception);
+                throw new System.AggregateException(exception.InnerException.GetBaseException().Message);
             }
+            
+            try
+            {
+                if (exists)
+                {
+                    if (ShouldProcess(Blob))
+                    {
+                        var message = "Are you sure to overwrite '" + StorageContext.BlobEndpoint + Container + "/" + Blob + "'?";
 
-            WriteObject(blob);
+                        if (Force || ShouldContinue(message, "Confirm"))
+                        {
+                            blob = storageHelper.UploadBlob(Container, resolvedFilePath, Blob).Result;
+                            WriteObject(blob);
+                        }
+                        else
+                        {
+                            throw new System.Management.Automation.HaltCommandException("Blob " + Blob + " already exists.");
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    blob = storageHelper.UploadBlob(Container, resolvedFilePath, Blob).Result;
+                    WriteObject(blob);
+                }
+                
+            }
+            catch (System.AggregateException exception)
+            {
+                throw new System.AggregateException(exception.InnerException.GetBaseException().Message);
+            }
         }
 
         private string resolveFilePath(string filePath)
