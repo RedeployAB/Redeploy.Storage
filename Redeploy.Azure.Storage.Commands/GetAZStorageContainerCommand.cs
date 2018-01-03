@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Management.Automation;
-using Microsoft.WindowsAzure.Storage.Blob; 
-using Microsoft.WindowsAzure.Storage.Auth;
-using Redeploy.Azure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Redeploy.Azure.Storage.Models;
+using Redeploy.Azure.Storage.Blob;
 
 namespace Redeploy.Azure.Storage.Commands
 {
@@ -14,15 +14,15 @@ namespace Redeploy.Azure.Storage.Commands
         [Parameter(
             Mandatory = true,
             Position = 0,
-            HelpMessage = "A StorageCredential object. Create one with 'New-AZStorageCredential'."
+            HelpMessage = "A StorageContext object. Create one with 'New-AZStorageContext'."
         )]
-        public StorageCredentials StorageCredential
+        public StorageContext StorageContext
         {
-            get { return _storageCredential; }
-            set { _storageCredential = value; }
+            get { return _storageContext; }
+            set { _storageContext = value; }
         }
 
-        private StorageCredentials _storageCredential;
+        private StorageContext _storageContext;
 
         [ValidateNotNullOrEmpty]
         [Parameter(
@@ -40,8 +40,8 @@ namespace Redeploy.Azure.Storage.Commands
 
         protected override void ProcessRecord()
         {
-            StorageCredentials credential = _storageCredential;
-            BlobStorageHelper storageHelper = new BlobStorageHelper(credential);
+            StorageContext context = _storageContext;
+            BlobHelper storageHelper = new BlobHelper(context);
             CloudBlobContainer container;
 
             try
