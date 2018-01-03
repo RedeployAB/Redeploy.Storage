@@ -17,12 +17,12 @@ namespace Redeploy.Azure.Storage.Commands
             Position = 0,
             HelpMessage = "A Storage Context object. Create one with 'New-AZStorageContext'."
         )]
-        public StorageContext StorageContext
+        public StorageContext Context
         {
-            get { return _storageContext; }
-            set { _storageContext = value; }
+            get { return _context; }
+            set { _context = value; }
         }
-        private StorageContext _storageContext;
+        private StorageContext _context;
 
         [ValidateNotNull]
         [Parameter(
@@ -76,7 +76,7 @@ namespace Redeploy.Azure.Storage.Commands
             
             var resolvedFilePath = resolveFilePath(_file);
 
-            StorageContext context = _storageContext;
+            StorageContext context = _context;
             BlobHelper storageHelper = new BlobHelper(context);
             
             CloudBlob blob;
@@ -97,7 +97,7 @@ namespace Redeploy.Azure.Storage.Commands
                 {
                     if (ShouldProcess(Blob))
                     {
-                        var message = "Are you sure to overwrite '" + StorageContext.BlobEndpoint + Container + "/" + Blob + "'?";
+                        var message = "Are you sure to overwrite '" + Context.BlobEndpoint + Container + "/" + Blob + "'?";
 
                         if (Force || ShouldContinue(message, "Confirm"))
                         {

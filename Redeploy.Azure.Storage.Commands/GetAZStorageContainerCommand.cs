@@ -16,13 +16,13 @@ namespace Redeploy.Azure.Storage.Commands
             Position = 0,
             HelpMessage = "A StorageContext object. Create one with 'New-AZStorageContext'."
         )]
-        public StorageContext StorageContext
+        public StorageContext Context
         {
-            get { return _storageContext; }
-            set { _storageContext = value; }
+            get { return _context; }
+            set { _context = value; }
         }
 
-        private StorageContext _storageContext;
+        private StorageContext _context;
 
         [ValidateNotNullOrEmpty]
         [Parameter(
@@ -40,7 +40,7 @@ namespace Redeploy.Azure.Storage.Commands
 
         protected override void ProcessRecord()
         {
-            StorageContext context = _storageContext;
+            StorageContext context = _context;
             BlobHelper storageHelper = new BlobHelper(context);
             CloudBlobContainer container;
 
