@@ -15,19 +15,6 @@ namespace Redeploy.Azure.Storage.Commands
         [Parameter(
             Mandatory = true,
             Position = 0,
-            HelpMessage = "A Storage Context object. Create one with 'New-AZStorageContext'."
-        )]
-        public StorageContext Context
-        {
-            get { return _context; }
-            set { _context = value; }
-        }
-        private StorageContext _context;
-
-        [ValidateNotNull]
-        [Parameter(
-            Mandatory = true,
-            Position = 1,
             HelpMessage = "Path as a string to a file to upload."
         )]
         public string File
@@ -40,7 +27,7 @@ namespace Redeploy.Azure.Storage.Commands
         [ValidateNotNull]
         [Parameter(
             Mandatory = true,
-            Position = 2,
+            Position = 1,
             HelpMessage = "Name of blob in the Storage Account Container."
         )]
         public string Blob
@@ -53,7 +40,7 @@ namespace Redeploy.Azure.Storage.Commands
         [ValidateNotNull]
         [Parameter(
             Mandatory = true,
-            Position = 3,
+            Position = 2,
             HelpMessage = "Name of container in Storage Account."
         )]
         public string Container
@@ -62,6 +49,19 @@ namespace Redeploy.Azure.Storage.Commands
             set { _container = value; }
         }
         private string _container;
+
+        [ValidateNotNull]
+        [Parameter(
+            Mandatory = true,
+            Position = 3,
+            HelpMessage = "A Storage Context object. Create one with 'New-AZStorageContext'."
+        )]
+        public StorageContext Context
+        {
+            get { return _context; }
+            set { _context = value; }
+        }
+        private StorageContext _context;
 
         [Parameter()]
         public SwitchParameter Force

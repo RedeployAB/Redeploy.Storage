@@ -10,8 +10,18 @@
     <PackageReference Include="System.Net.Http" Version="4.1.0">
       <IncludeAssets>Analyzers;Build;Compile;ContentFiles;Native</IncludeAssets>
     </PackageReference>
+
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Redeploy.Azure.Storage\Redeploy.Azure.Storage.csproj" />
   </ItemGroup>
+
+  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+    <Copy SourceFiles="../assets/AZStorage.Netcore.psd1" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="../assets/AZStorage.Netcore.psm1" DestinationFolder="$(OutDir)" />
+  </Target>
+  <Target Name="CopyCustomContentOnPublish" AfterTargets="Publish">
+    <Copy SourceFiles="../assets/AZStorage.Netcore.psd1" DestinationFolder="../build/AZStorage.Netcore" />
+    <Copy SourceFiles="../assets/AZStorage.Netcore.psm1" DestinationFolder="../build/AZStorage.Netcore" />
+  </Target>
 </Project>
