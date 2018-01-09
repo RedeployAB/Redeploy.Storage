@@ -2,18 +2,14 @@
 
 ## <a name=intro>Introduction</a>
 
-This module was created to make up for the lack of an official module for handling of Azure Storage Accounts with PowerShell Core
-(not the resources in ARM, but rather uploading blobs, getting containers etc).
+This module was created to make up for the lack of an official module (*At least I have not found one*) for handling of Azure Storage Accounts with PowerShell Core
+(not the resources in ARM, but rather uploading blobs, getting containers etc). It is mostly developed because I needed the functionality in another project.
 
 To achieve this it uses the library: `WindowsAzure.Storage` (v8.6.0).
 
-The cmdlets in this module works similar to the cmdlets in the official `Azure.Storage` module. They
-will mostly have the same parameters, structure and functionality as their counterparts in that module. 
-At the moment only a couple of cmdlets have been added. But more will be added as needed.
+The cmdlets in this module works similar to the cmdlets in the official `Azure.Storage` module. They will mostly have the same parameters, structure and functionality as their counterparts in that module. 
+At the moment only a couple of cmdlets have been added. But more will be added as needed. Not all parameters from the official modules cmdlets are supported.
 
-The module consists of the projects found in (that project and this one wil be consolidated further on):
-
-[Redeploy.Azure]()
 
 **Content**
 
@@ -59,8 +55,9 @@ Set-AZStorageBlobContent -Context $ctx -File C:\<path>\<to>\file.txt -Blob file.
 
 ## <a name=compatability>Compatability</a>
 
-| Operating System | PowerShell Edition | Compatible |
-|------------------|--------------------|------------|
-| **Windows 10**   | *5.1*              | **Yes**    |
+| Operating System | PowerShell Edition  | Compatible |
+|------------------|---------------------|------------|
+| Windows 10       | *5.1 (Desktop)*     | **Yes**    |
+| WSL Ubuntu       | *6.0.0-rc.2 (Core)* | **Yes**    |
 
 ## <a name=version>Versions and Updates</a>
