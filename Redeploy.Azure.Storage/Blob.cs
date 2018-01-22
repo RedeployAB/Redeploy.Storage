@@ -106,8 +106,13 @@ namespace Redeploy.Azure.Storage.Blob
             {
                 using (var fileStream = System.IO.File.OpenRead(filePath))
                 {
-                    await blockBlob.UploadFromStreamAsync(fileStream);
+                    //await blockBlob.UploadFromStreamAsync(fileStream, fileStream.Length);
+                    var requestOptions = new BlobRequestOptions { ServerTimeout = new System.TimeSpan(0, 30, 0), RetryPolicy = new LinearRetry(System.TimeSpan.FromMilliseconds(1000), 3) };
+                    var operationContext = new OperationContext();
+                    await blockBlob.UploadFromStreamAsync(fileStream, fileStream.Length, null, requestOptions, operationContext);
                 }
+                
+                //await blockBlob.UploadFromFileAsync(filePath);
             }
             catch (System.IO.IOException exception)
             {
@@ -160,7 +165,13 @@ namespace Redeploy.Azure.Storage.Blob
         {
             CloudBlobClient storageClient = StorageContext.StorageAccount.CreateCloudBlobClient();
             // Set options here.
-            storageClient.DefaultRequestOptions = new BlobRequestOptions { ServerTimeout = new System.TimeSpan(0, 0, 10) };
+            storageClient.DefaultRequestOptions = new BlobRequestOptions { 
+                ServerTimeout = new System.TimeSpan(0, 0, 10),
+                RetryPolicy = new LinearRetry(System.TimeSpan.FromMilliseconds(500), 3) };
+
+            /*storageClient.DefaultRequestOptions = new BlobRequestOptions { 
+                ServerTimeout = new System.TimeSpan(0, 0, 10),
+                RetryPolicy = new LinearRetry(System.TimeSpan.FromMilliseconds(500), 3) };*/
 
             return storageClient;
         }
