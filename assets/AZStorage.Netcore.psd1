@@ -43,7 +43,7 @@
             Tags = @('Azure', 'Storage', 'Blob', 'Container')
 
             # What software license is your code being released under? (see https://opensource.org/licenses)
-            LicenseUri = ''
+            LicenseUri = 'https://github.com/RedeployAB/AZStorage.Netcore/blob/master/LICENSE'
 
             # What is the URL to your project's website?
             ProjectUri = 'https://github.com/RedeployAB/AZStorage.Netcore'
