@@ -46,13 +46,25 @@
             LicenseUri = ''
 
             # What is the URL to your project's website?
-            ProjectUri = ''
+            ProjectUri = 'https://github.com/RedeployAB/AZStorage.Netcore'
 
             # What is the URI to a custom icon file for your project? (optional)
             IconUri = ''
 
             # What new features, bug fixes, or deprecated features, are part of this release?
             ReleaseNotes = @'
+            Initial release. Misses A LOT of features. It's a work in progress.
+
+            * Get-AZStorageContainer
+            * New-AZStorageContainer
+            * New-AZStorageContext
+            * Set-AZStorageBlobContent
+
+            These cmdlets misses some functionality, but the basics are there.
+            Next update will contain possibility to list containers without specifying a name.
+            Also listing blobs, and removing blobs will be added.
+
+            It's a work in progress.
 '@
         }
     }
