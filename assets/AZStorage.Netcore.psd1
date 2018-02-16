@@ -6,12 +6,12 @@
 
     CompanyName = 'Redeploy AB'
 
-    ModuleVersion = '0.1.0'
+    ModuleVersion = '0.1.1'
 
     # Use the New-Guid command to generate a GUID, and copy/paste into the next line
     GUID = 'f5e178fa-15b5-4317-9c74-cfcc96b974a3'
 
-    Copyright = '2017 Copyright Holder'
+    Copyright = '2017 Redeploy AB'
 
     Description = 'PowerShell Core module for handling Azure Storage accounts'
 
@@ -43,10 +43,10 @@
             Tags = @('Azure', 'Storage', 'Blob', 'Container')
 
             # What software license is your code being released under? (see https://opensource.org/licenses)
-            LicenseUri = 'https://github.com/RedeployAB/AZStorage.Netcore/blob/master/LICENSE'
+            LicenseUri = 'https://github.com/RedeployAB/Redeploy.Storage/blob/master/LICENSE'
 
             # What is the URL to your project's website?
-            ProjectUri = 'https://github.com/RedeployAB/AZStorage.Netcore'
+            ProjectUri = 'https://github.com/RedeployAB/Redeploy.Storage'
 
             # What is the URI to a custom icon file for your project? (optional)
             IconUri = ''
