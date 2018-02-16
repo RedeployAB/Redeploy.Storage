@@ -6,7 +6,7 @@ param(
     $BuildDirectory
 )
 
-# Needs additional settings for versionin. This is an early build.§
+# Needs additional settings for versioning. This is an early build.
 
 # Predefine variables.
 $moduleName = "AZStorage.Netcore"
