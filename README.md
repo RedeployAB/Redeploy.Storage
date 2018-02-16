@@ -72,7 +72,7 @@ Tested on the following operating systems, distrobutions etc.
 * Add cmdlet `Get-AZStorageBlob`.
 * Update `Get-AZStorageContainer` to list all containers if no name is specified. 
 * Update all `Get` and `Set` to handle cancellation better.
-* More to be addded...
+* More to be added...
 
 
 ## <a name=version>Versions and Updates</a>
