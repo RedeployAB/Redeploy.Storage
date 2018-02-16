@@ -56,11 +56,15 @@ Set-AZStorageBlobContent -Context $ctx -File C:\<path>\<to>\file.txt -Blob file.
 
 ## <a name=compatability>Compatability</a>
 
-| Operating System   | PowerShell Edition  | Compatible | Notes                                                                                                           |
-|--------------------|---------------------|------------|-----------------------------------------------------------------------------------------------------------------|
-| Windows 10         | *5.1 (Desktop)*     | **Yes**    | Some Cmdlets native to PS Desktop will stop working after import. Close the terminal to get functionality back. |
-| Windows 10         | *6.0.0 (Core)*      | **Yes**    |
-| WSL Ubuntu (16.04) | *6.0.0-rc.2 (Core)* | **Yes**    |
+Tested on the following operating systems, distrobutions etc.
+
+| Operating System    | PowerShell Edition  | Compatible                              | Notes                                                                                                           |
+|---------------------|---------------------|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| Windows 10          | *5.1 (Desktop)*     | **Yes (If dotnet core 2 is installed)** | Some Cmdlets native to PS Desktop will stop working after import. Close the terminal to get functionality back. |
+| Windows 10          | *6.0.1 (Core)*      | **Yes**                                 |                                                                                                                 |
+| Nano Server         | *6.0.0 (Core)*      | **Yes**                                 |                                                                                                                 |
+| WSL Ubuntu (16.04)  | *6.0.0-rc.2 (Core)* | **Yes**                                 |                                                                                                                 |
+| WSL Ubuntu (16.04)  | *6.0.1 (Core)*      | **Yes**                                 |                                                                                                                 |
 
 
 ## <a name=todo>ToDo</a>
