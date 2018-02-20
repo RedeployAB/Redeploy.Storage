@@ -28,7 +28,7 @@ namespace Redeploy.Azure.Storage.Models
         public Uri TableEndPoint { get; }
         public Uri QueueEndpoint { get; }
         public Uri FileEndPoint { get; }
-         public CloudStorageAccount StorageAccount { get; set; }
+        public CloudStorageAccount StorageAccount { get; set; }
 
         public string EndPointSuffix { get; } = "core.windows.net";
     }
