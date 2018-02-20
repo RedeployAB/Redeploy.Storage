@@ -6,7 +6,7 @@
 
     CompanyName = 'Redeploy AB'
 
-    ModuleVersion = '0.1.1'
+    ModuleVersion = '0.1.2'
 
     # Use the New-Guid command to generate a GUID, and copy/paste into the next line
     GUID = 'f5e178fa-15b5-4317-9c74-cfcc96b974a3'
