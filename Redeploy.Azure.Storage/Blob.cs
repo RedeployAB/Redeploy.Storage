@@ -26,7 +26,7 @@ namespace Redeploy.Azure.Storage.Blob
             StorageContext = storageContext;
         }
 
-                /// <summary>
+        /// <summary>
         /// Gets a container from an Azure Storage Account. Returns null if it does not exist.
         /// </summary>
         /// <param name="containerName"></param>
@@ -168,10 +168,6 @@ namespace Redeploy.Azure.Storage.Blob
             storageClient.DefaultRequestOptions = new BlobRequestOptions { 
                 ServerTimeout = new System.TimeSpan(0, 0, 10),
                 RetryPolicy = new LinearRetry(System.TimeSpan.FromMilliseconds(500), 3) };
-
-            /*storageClient.DefaultRequestOptions = new BlobRequestOptions { 
-                ServerTimeout = new System.TimeSpan(0, 0, 10),
-                RetryPolicy = new LinearRetry(System.TimeSpan.FromMilliseconds(500), 3) };*/
 
             return storageClient;
         }
